@@ -1,0 +1,17 @@
+{
+  "item":
+  [
+    ["offshore-pump", "offshore-pump-1"]
+  ],
+  "entity":
+  [
+    ["offshore-pump", "offshore-pump-1"]
+  ],
+  "technology":
+  [
+    ["offshore-pump-tech-2", "offshore-pump-tech_2"],
+    ["offshore-pump-tech-3", "offshore-pump-tech_3"],
+    ["offshore-pump-tech-4", "offshore-pump-tech_4"]
+  ]
+}
+
