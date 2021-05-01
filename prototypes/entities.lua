@@ -265,7 +265,7 @@ if settings.startup ["enable-power"].value == true then
 	
 	local offshore_pump_0 = table.deepcopy(data.raw["assembling-machine"]["burner-offshore-template"]) -- Offshore pump burner
 	offshore_pump_0.name = "offshore-pump-0"
-	offshore_pump_0.icon = "__base__/graphics/icons/offshore-pump.png"
+	offshore_pump_0.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-0.png"
 	offshore_pump_0.minable = {mining_time = 0.1, result = "offshore-pump-0"}
 	offshore_pump_0.placeable_by = {item = "offshore-pump-0", count = 1}
 	offshore_pump_0.max_health = 100
@@ -285,7 +285,7 @@ if settings.startup ["enable-power"].value == true then
 	local offshore_pump_1 = table.deepcopy(data.raw["assembling-machine"]["electric-offshore-template"]) -- Offshore pump 1
 	offshore_pump_1.next_upgrade = "offshore-pump-2-placeholder"
 	offshore_pump_1.name = "offshore-pump-1"
-	offshore_pump_1.icon = "__base__/graphics/icons/offshore-pump.png"
+	offshore_pump_1.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-1.png"
 	offshore_pump_1.minable = {mining_time = 0.1, result = "offshore-pump-1"}
 	offshore_pump_1.placeable_by = {item = "offshore-pump-1", count = 1}
 	offshore_pump_1.max_health = 150
