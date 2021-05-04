@@ -55,14 +55,14 @@ function functions.fix_collision_mask(entity_name)
 end
 
 -- Add recipe to tech
-function functions.add_tech(recipe, tech_name)
+function functions.add_tech_recipe(recipe, tech_name)
 	if data.raw.technology[tech_name] and data.raw.recipe[recipe] then
 		table.insert(data.raw.technology[tech_name].effects,{type = "unlock-recipe", recipe = recipe})
 	end
 end
 
 -- Remove recipe from tech
-function functions.rem_tech(recipe, tech_name)
+function functions.remove_tech_recipe(recipe, tech_name)
 	if data.raw.technology[tech_name] and data.raw.recipe[recipe] then
 		for i, effect in pairs(data.raw.technology[tech_name].effects) do
 			if effect.type == "unlock-recipe" and effect.recipe == recipe then

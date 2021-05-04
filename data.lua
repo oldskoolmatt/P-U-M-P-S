@@ -10,3 +10,4 @@ require ("prototypes.technology")
 
 -- Apply internal overrides
 require("prototypes.override.overrides")
+require("prototypes.override.bob-overrides")

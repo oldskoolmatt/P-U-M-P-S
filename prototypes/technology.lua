@@ -3,10 +3,10 @@
 ------------------
 
 -- Fetch functions from library
-local add_tech = require ("utils.lib").add_tech
+local add_tech_recipe = require ("utils.lib").add_tech_recipe
 
 -- Offshore pump 1
-add_tech ("offshore-pump-1", "fluid-handling")
+add_tech_recipe ("offshore-pump-1", "fluid-handling")
 
 
 -- Offshore pump 2
@@ -46,7 +46,8 @@ local offshore_technology_pump_3 =
 		ingredients =
 		{
 			{"automation-science-pack", 1},
-			{"logistic-science-pack", 1}
+			{"logistic-science-pack", 1},
+			{"chemical-science-pack", 1}
 		},
 		time = 30
 	},
