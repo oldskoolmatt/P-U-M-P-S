@@ -2,6 +2,14 @@
 ---- data.lua ----
 ------------------
 
+-- Fetch functions from library
+local replace_tech_ingredient = require ("utils.lib").replace_tech_ingredient
+
+-- Edit tech science packs for bobs technology
+if mods ["bobtech"] then
+	replace_tech_ingredient("production-science-pack","advanced-logistic-science-pack","offshore-pump-tech_4")
+end
+
 -- Edit recipes and techs for bobs
 if mods ["bobplates"] then		
 	if mods ["boblogistics"] then
@@ -62,10 +70,3 @@ else
 		data.raw.technology["offshore-pump-tech_4"].prerequisites = {"offshore-pump-tech_3", "bob-fluid-handling-4", "advanced-electronics-2"}
 	end
 end
-
-if mods ["bobtech"] then
-	table.insert(data.raw.technology["offshore-pump-tech_4"].unit.ingredients, {"advanced-logistic-science-pack", 1})
-else
-	table.insert(data.raw.technology["offshore-pump-tech_4"].unit.ingredients, {"production-science-pack", 1})
-end
-

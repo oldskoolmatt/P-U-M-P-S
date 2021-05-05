@@ -17,14 +17,14 @@ local offshore_technology_pump_2 =
 	icon_size = 128,
 	icon = "__P-U-M-P-S__/graphics/technology/offshore-pump-2.png",
 	prerequisites = {"fluid-handling"},
-	effects ={{ type = "unlock-recipe", recipe = "offshore-pump-2" }},
+	effects ={{type = "unlock-recipe", recipe = "offshore-pump-2"}},
 	unit =
 	{
 		count = 50,
 		ingredients =
 		{
-			{"automation-science-pack", 1},
-			{"logistic-science-pack", 1}
+			{name="automation-science-pack", amount = 1},
+			{name="logistic-science-pack", amount = 1}
 		},
 		time = 30
 	},
@@ -38,16 +38,16 @@ local offshore_technology_pump_3 =
 	name = "offshore-pump-tech_3",
 	icon_size = 128,
 	icon = "__P-U-M-P-S__/graphics/technology/offshore-pump-3.png",
-	effects = {{ type = "unlock-recipe", recipe = "offshore-pump-3" }},
+	effects = {{type = "unlock-recipe", recipe = "offshore-pump-3"}},
 	prerequisites = {"offshore-pump-tech_2", "advanced-electronics"},
 	unit =
 	{
 		count = 75,
 		ingredients =
 		{
-			{"automation-science-pack", 1},
-			{"logistic-science-pack", 1},
-			{"chemical-science-pack", 1}
+			{name = "automation-science-pack", amount = 1},
+			{name = "logistic-science-pack", amount = 1},
+			{name = "chemical-science-pack", amount = 1}
 		},
 		time = 30
 	},
@@ -61,16 +61,17 @@ local offshore_technology_pump_4 =
 	name = "offshore-pump-tech_4",
 	icon_size = 128,
 	icon = "__P-U-M-P-S__/graphics/technology/offshore-pump-4.png",
-	effects = {{ type = "unlock-recipe", recipe = "offshore-pump-4" }},
+	effects = {{type = "unlock-recipe", recipe = "offshore-pump-4"}},
 	prerequisites = {"offshore-pump-tech_3", "advanced-electronics-2"},
 	unit =
 	{
 		count = 100,
 		ingredients =
 			{
-				{"automation-science-pack", 1},
-				{"logistic-science-pack", 1},
-				{"chemical-science-pack", 1}
+				{name = "automation-science-pack", amount = 1},
+				{name = "logistic-science-pack", amount = 1},
+				{name = "chemical-science-pack", amount = 1},
+				{name = "production-science-pack", amount = 1}
 			},
 		time = 30
 	},

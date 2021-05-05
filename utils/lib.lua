@@ -84,6 +84,18 @@ function functions.replace_tech_recipe(old_recipe, new_recipe, tech_name)
 	end
 end
 
+-- Replace tech ingredients
+function functions.replace_tech_ingredient(old_ingredient, new_ingredient, tech_name)
+	if data.raw.technology[tech_name].unit.ingredients then
+		for i,ingredient in pairs(data.raw.technology[tech_name].unit.ingredients) do
+			if ingredient.name == old_ingredient then
+				table.remove(data.raw.technology[tech_name].unit.ingredients,i)
+				table.insert(data.raw.technology[tech_name].unit.ingredients, {name=new_ingredient, amount=ingredient.amount})
+			end
+		end
+	end
+end
+
 -- Set artisanal reskin tiering
 function functions.assign_tier(filename, tier)
 	inputs =

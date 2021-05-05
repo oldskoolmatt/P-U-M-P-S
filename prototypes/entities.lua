@@ -29,7 +29,6 @@ local corpse = "offshore-pump-remnants"
 local dying_explosion = "offshore-pump-explosion"
 local alert_icon_shift = util.by_pixel(0, 0)
 local resistances = {{type = "fire", percent = 70}}
-local subgroup = "other"
 local damaged_trigger_effect = hit_effects.entity()
 local circuit_wire_connection_points = circuit_connector_definitions["offshore-pump"].points
 local circuit_connector_sprites = circuit_connector_definitions["offshore-pump"].sprites
@@ -134,7 +133,6 @@ local unpowered_pump_template =
     dying_explosion = dying_explosion,
 	alert_icon_shift = alert_icon_shift,
 	resistances = resistances,
-	subgroup = subgroup,
 	damaged_trigger_effect = damaged_trigger_effect,
 	circuit_wire_connection_points = circuit_wire_connection_points,
 	circuit_connector_sprites = circuit_connector_sprites,
@@ -185,7 +183,6 @@ local burner_pump_template =
     dying_explosion = dying_explosion,
 	alert_icon_shift = alert_icon_shift,
 	resistances = resistances,
-	subgroup = subgroup,
 	damaged_trigger_effect = damaged_trigger_effect,
 	circuit_wire_connection_points = circuit_wire_connection_points,
 	circuit_connector_sprites = circuit_connector_sprites,
@@ -236,7 +233,6 @@ local powered_pump_template =
     dying_explosion = dying_explosion,
 	alert_icon_shift = alert_icon_shift,
 	resistances = resistances,
-	subgroup = subgroup,
 	damaged_trigger_effect = damaged_trigger_effect,
 	circuit_wire_connection_points = circuit_wire_connection_points,
 	circuit_connector_sprites = circuit_connector_sprites,
@@ -256,8 +252,8 @@ if settings.startup ["enable-power"].value == true then
 
 	-- Make offshore pump 0
 	local offshore_placeholder_0 = table.deepcopy(data.raw["offshore-pump"]["unpowered-offshore-template"]) -- Placeholder burner
-	offshore_placeholder_0.subgroup = "extraction-machine"
 	offshore_placeholder_0.name = "offshore-pump-0-placeholder"
+	offshore_placeholder_0.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-0.png"
 	offshore_placeholder_0.minable = {mining_time = 0.1, result = "offshore-pump-0"}
 	offshore_placeholder_0.max_health = 100
 	offshore_placeholder_0.pumping_speed = 5
@@ -265,6 +261,7 @@ if settings.startup ["enable-power"].value == true then
 	
 	local offshore_pump_0 = table.deepcopy(data.raw["assembling-machine"]["burner-offshore-template"]) -- Offshore pump burner
 	offshore_pump_0.name = "offshore-pump-0"
+	offshore_pump_0.subgroup = "other"
 	offshore_pump_0.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-0.png"
 	offshore_pump_0.minable = {mining_time = 0.1, result = "offshore-pump-0"}
 	offshore_pump_0.placeable_by = {item = "offshore-pump-0", count = 1}
@@ -275,7 +272,6 @@ if settings.startup ["enable-power"].value == true then
 
 	-- Make offshore pump 1
 	local offshore_placeholder_1 = table.deepcopy(data.raw["offshore-pump"]["unpowered-offshore-template"]) -- Placeholder 1
-	offshore_placeholder_1.subgroup = "extraction-machine"
 	offshore_placeholder_1.name = "offshore-pump-1-placeholder"
 	offshore_placeholder_1.minable = {mining_time = 0.1, result = "offshore-pump-1"}
 	offshore_placeholder_1.max_health = 150
@@ -285,6 +281,7 @@ if settings.startup ["enable-power"].value == true then
 	local offshore_pump_1 = table.deepcopy(data.raw["assembling-machine"]["electric-offshore-template"]) -- Offshore pump 1
 	offshore_pump_1.next_upgrade = "offshore-pump-2-placeholder"
 	offshore_pump_1.name = "offshore-pump-1"
+	offshore_pump_1.subgroup = "other"
 	offshore_pump_1.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-1.png"
 	offshore_pump_1.minable = {mining_time = 0.1, result = "offshore-pump-1"}
 	offshore_pump_1.placeable_by = {item = "offshore-pump-1", count = 1}
@@ -295,7 +292,6 @@ if settings.startup ["enable-power"].value == true then
 	
 	-- Make offshore pump 2
 	local offshore_placeholder_2 = table.deepcopy(data.raw["offshore-pump"]["unpowered-offshore-template"]) -- Placeholder 2
-	offshore_placeholder_2.subgroup = "extraction-machine"
 	offshore_placeholder_2.name = "offshore-pump-2-placeholder"
 	offshore_placeholder_2.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-2.png"
 	offshore_placeholder_2.minable = {mining_time = 0.1, result = "offshore-pump-2"}
@@ -306,6 +302,7 @@ if settings.startup ["enable-power"].value == true then
 	local offshore_pump_2 = table.deepcopy(data.raw["assembling-machine"]["electric-offshore-template"]) -- Offshore pump 2
 	offshore_pump_2.next_upgrade = "offshore-pump-3-placeholder"
 	offshore_pump_2.name = "offshore-pump-2"
+	offshore_pump_2.subgroup = "other"
 	offshore_pump_2.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-2.png"
 	offshore_pump_2.minable = {mining_time = 0.1, result = "offshore-pump-2"}
 	offshore_pump_2.placeable_by = {item = "offshore-pump-2", count = 1}
@@ -316,7 +313,6 @@ if settings.startup ["enable-power"].value == true then
 	
 	-- Make offshore pump 3
 	local offshore_placeholder_3 = table.deepcopy(data.raw["offshore-pump"]["unpowered-offshore-template"]) -- Placeholder 3
-	offshore_placeholder_3.subgroup = "extraction-machine"
 	offshore_placeholder_3.name = "offshore-pump-3-placeholder"
 	offshore_placeholder_3.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-3.png"
 	offshore_placeholder_3.minable = {mining_time = 0.1, result = "offshore-pump-3"}
@@ -327,6 +323,7 @@ if settings.startup ["enable-power"].value == true then
 	local offshore_pump_3 = table.deepcopy(data.raw["assembling-machine"]["electric-offshore-template"]) -- Offshore pump 3
 	offshore_pump_3.next_upgrade = "offshore-pump-4-placeholder"
 	offshore_pump_3.name = "offshore-pump-3"
+	offshore_pump_3.subgroup = "other"
 	offshore_pump_3.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-3.png"
 	offshore_pump_3.minable = {mining_time = 0.1, result = "offshore-pump-3"}
 	offshore_pump_3.placeable_by = {item = "offshore-pump-3", count = 1}
@@ -337,7 +334,6 @@ if settings.startup ["enable-power"].value == true then
 	
 	-- Make offshore pump 4
 	local offshore_placeholder_4 = table.deepcopy(data.raw["offshore-pump"]["unpowered-offshore-template"]) -- Placeholder 4
-	offshore_placeholder_4.subgroup = "extraction-machine"
 	offshore_placeholder_4.name = "offshore-pump-4-placeholder"
 	offshore_placeholder_4.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-4.png"
 	offshore_placeholder_4.minable = {mining_time = 0.1, result = "offshore-pump-4"}
@@ -347,6 +343,7 @@ if settings.startup ["enable-power"].value == true then
 
 	local offshore_pump_4 = table.deepcopy(data.raw["assembling-machine"]["electric-offshore-template"]) -- Offshore pump 4
 	offshore_pump_4.name = "offshore-pump-4"
+	offshore_pump_4.subgroup = "other"
 	offshore_pump_4.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-4.png"
 	offshore_pump_4.minable = {mining_time = 0.1, result = "offshore-pump-4"}
 	offshore_pump_4.placeable_by = {item = "offshore-pump-4", count = 1}
@@ -359,7 +356,6 @@ else --error("\nDISABLING POWER REQUIREMENTS FOR OFFSHORE PUMPS BREAKS THE FIRST
 
 	-- Make absolutely-fine-perpetual-motion water-thing 0
 	local offshore_pump_0 = table.deepcopy(data.raw["offshore-pump"]["unpowered-offshore-template"])
-	offshore_pump_0.subgroup = "extraction-machine"
 	offshore_pump_0.name = "offshore-pump-0"
 	offshore_pump_0.minable = {mining_time = 0.1, result = "offshore-pump-0"}
 	offshore_pump_0.max_health = 100
@@ -369,7 +365,6 @@ else --error("\nDISABLING POWER REQUIREMENTS FOR OFFSHORE PUMPS BREAKS THE FIRST
 	-- Make absolutely-fine-perpetual-motion water-thing 1
 	local offshore_pump_1 = table.deepcopy(data.raw["offshore-pump"]["unpowered-offshore-template"])
 	offshore_pump_1.next_upgrade = "offshore-pump-2"
-	offshore_pump_1.subgroup = "extraction-machine"
 	offshore_pump_1.name = "offshore-pump-1"
 	offshore_pump_1.minable = {mining_time = 0.1, result = "offshore-pump-1"}
 	offshore_pump_1.placeable_by = {item = "offshore-pump-1", count = 1}
@@ -380,7 +375,6 @@ else --error("\nDISABLING POWER REQUIREMENTS FOR OFFSHORE PUMPS BREAKS THE FIRST
 	-- Make absolutely-fine-perpetual-motion water-thing 2
 	local offshore_pump_2 = table.deepcopy(data.raw["offshore-pump"]["unpowered-offshore-template"])
 	offshore_pump_2.next_upgrade = "offshore-pump-3"
-	offshore_pump_2.subgroup = "extraction-machine"
 	offshore_pump_2.name = "offshore-pump-2"
 	offshore_pump_2.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-2.png"
 	offshore_pump_2.minable = {mining_time = 0.1, result = "offshore-pump-2"}
@@ -392,7 +386,6 @@ else --error("\nDISABLING POWER REQUIREMENTS FOR OFFSHORE PUMPS BREAKS THE FIRST
 	-- Make absolutely-fine-perpetual-motion water-thing 3
 	local offshore_pump_3 = table.deepcopy(data.raw["offshore-pump"]["unpowered-offshore-template"])
 	offshore_pump_3.next_upgrade = "offshore-pump-4"
-	offshore_pump_3.subgroup = "extraction-machine"
 	offshore_pump_3.name = "offshore-pump-3"
 	offshore_pump_3.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-3.png"
 	offshore_pump_3.minable = {mining_time = 0.1, result = "offshore-pump-3"}
@@ -404,7 +397,6 @@ else --error("\nDISABLING POWER REQUIREMENTS FOR OFFSHORE PUMPS BREAKS THE FIRST
 	-- Make absolutely-fine-perpetual-motion water-thing 4
 	local offshore_pump_4 = table.deepcopy(data.raw["offshore-pump"]["unpowered-offshore-template"])
 	offshore_pump_4.name = "offshore-pump-4"
-	offshore_pump_4.subgroup = "extraction-machine"
 	offshore_pump_4.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-4.png"
 	offshore_pump_4.minable = {mining_time = 0.1, result = "offshore-pump-4"}
 	offshore_pump_4.placeable_by = {item = "offshore-pump-4", count = 1}

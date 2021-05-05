@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.22
+Date: 05. 05. 2021
+  Info:
+    - Added an internal function for tech ingredients replacement
+  Bugfixes:
+    - Restored an entity wrong icon
+    - Offshore pumps now showing in correct tabs while in /editor
+---------------------------------------------------------------------------------------------------
 Version: 1.1.21
 Date: 04. 05. 2021
   Changes:
