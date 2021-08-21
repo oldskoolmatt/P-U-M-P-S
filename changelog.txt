@@ -1,4 +1,33 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.32
+Date: 21. 08. 2021
+  Changes:
+    - Removed parts of the reskin code as it's been implemented in "Artisanal Reskins: Compatibility" (thanks to Kirazy)
+  Bugfixes:
+    - Fixed a crash on startup related to bob's settings
+---------------------------------------------------------------------------------------------------
+Version: 1.1.31
+Date: 20. 08. 2021
+  Bugfixes:
+    - Fixed an incompatibility with "AAI industry" (due to latest code update)
+    - Fixed an incompatibility if "Bob Ores" was missing
+    - Fixed a crash related to "Artisanal Reskins Bob"
+---------------------------------------------------------------------------------------------------
+Version: 1.1.30
+Date: 28. 07. 2021
+  Features:
+    - Implemented a ground water pumpjack with relative tech, ground water pumpjacks are land based pumps (Offshore pumps will still be the real deal though)
+        - If bob's mining is installed there will be 5 tiers of ground water pumpjacks
+            - If Kirazy's "Artisanal Reskin" is installed ground water pumpjacks will have tiered sprites and icons
+  Changes:
+    - Bob's ground water patches are removed to keep up the balance (lithia water is NOT affected, only ground water is removed)
+  Info:
+    - Ground water pumpkjack will always require electricity regardless of the settings (price to pay for pumping wherever you like)
+    - The new features balance are is not throughly tested with angel's mods, consider it an early version if you decide to give it a shot and report any issues
+  Bugfixes:
+    - Recipes requiring the vanilla offshore pump as ingredient will now use my version of it
+    - Fixed an issue where custom boilers with different fluid inputs than water started with water placed inside if "boilers start with water" option was turned on
+---------------------------------------------------------------------------------------------------
 Version: 1.1.22
 Date: 05. 05. 2021
   Info:

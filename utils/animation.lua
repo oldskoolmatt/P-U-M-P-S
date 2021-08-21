@@ -5,6 +5,15 @@
 -- Setup animation host
 local animation_set = {}
 
+-- Enlist entity names
+local entity_table =
+{
+	"offshore-pump-0",
+	"offshore-pump-2",
+	"offshore-pump-3",
+	"offshore-pump-4"
+}
+
 -- Store animation functions
 local function make_stripes(count, filename)
 	 local stripe = {filename=filename, width_in_frames = 1, height_in_frames = 1}
@@ -563,17 +572,8 @@ local legs_sprite_WEST =
 	}
 }
 
--- Recolor Mask
+-- Recolor Masks
 function animation_set.sprite_recolor()
-
-	local entity_table =
-	{
-		"offshore-pump-0",
-		"offshore-pump-2",
-		"offshore-pump-3",
-		"offshore-pump-4"
-	}
-	
 	for _, entity_name in pairs (entity_table) do
 
 		local mask_unpowered
@@ -582,9 +582,7 @@ function animation_set.sprite_recolor()
 		
 		if data.raw["assembling-machine"][entity_name] then
 			mask_powered = data.raw["assembling-machine"][entity_name].animation
-		end
-		if data.raw["offshore-pump"][entity_name .. "-placeholder"] then
-			mask_placeholder = data.raw["offshore-pump"][entity_name .. "-placeholder"].graphics_set.animation
+			mask_placeholder = data.raw["offshore-pump"][entity_name .. "-placeholder"].graphics_set.animation		
 		elseif data.raw["offshore-pump"][entity_name] then
 			mask_unpowered = data.raw["offshore-pump"][entity_name].graphics_set.animation
 		end
@@ -686,6 +684,192 @@ function animation_set.sprite_recolor()
 				}
 			})
 		end
+	end
+end
+function animation_set.pumpjack_tiering()
+
+	-- Set input parameters
+	local assign_icon_tier = require("utils.lib").assign_icon_tier
+	local inputs =
+	{
+		type = "assembling-machine",
+		base_entity = "pumpjack",
+		mod = "bobs",
+		group = "mining",
+		particles = {["small"] = 3},
+	}
+	
+	local tier_map =
+	{
+		["water-pumpjack-1"] = {1},
+		["water-pumpjack-2"] = {2},
+		["water-pumpjack-3"] = {3},
+		["water-pumpjack-4"] = {4},
+		["water-pumpjack-5"] = {5}
+	}
+	
+	local entity_highlights =
+	{
+		priority = "high",
+		filename = "__reskins-bobs__/graphics/entity/mining/pumpjack/pumpjack-horsehead-highlights.png",
+		line_length = 8,
+		width = 104,
+		height = 102,
+		frame_count = 40,
+		shift = util.by_pixel(-4, -24),
+		blend_mode = reskins.lib.blend_mode, -- "additive",
+		animation_speed = 0.5,
+		hr_version =
+		{
+			priority = "high",
+			filename = "__reskins-bobs__/graphics/entity/mining/pumpjack/hr-pumpjack-horsehead-highlights.png",
+			animation_speed = 0.5,
+			scale = 0.5,
+			line_length = 8,
+			frame_count = 40,
+			width = 206,
+			height = 202,
+			shift = util.by_pixel(-4, -24),
+			blend_mode = reskins.lib.blend_mode, -- "additive",
+		}
+	}
+	
+	for name, map in pairs(tier_map) do
+	
+		-- Fetch entity
+		local entity = data.raw[inputs.type][name]
+	
+		-- Check if entity exists, if not, skip this iteration
+		if not entity then goto continue end
+	
+		-- Parse map
+		local tier = map[1]
+	
+		-- Determine what tint we're using
+		inputs.tint = reskins.lib.tint_index[tier]
+	
+		-- Parse inputs
+		reskins.lib.parse_inputs(inputs)
+
+		-- Create particles and explosions
+		if inputs.make_explosions then
+			reskins.lib.create_explosions_and_particles(name, inputs)
+		end
+
+		-- Create remnants
+		if inputs.make_remnants then
+			reskins.lib.create_remnant(name, inputs)
+		end
+
+		local entity_mask =
+		{
+			filename = "__reskins-bobs__/graphics/entity/mining/pumpjack/pumpjack-horsehead-mask.png",
+			priority = "high",
+			line_length = 8,
+			frame_count = 40,
+			animation_speed = 0.5,
+			width = 104,
+			height = 102,
+			shift = util.by_pixel(-4, -24),
+			tint = inputs.tint,
+			hr_version =
+			{
+				filename = "__reskins-bobs__/graphics/entity/mining/pumpjack/hr-pumpjack-horsehead-mask.png",
+				priority = "high",
+				line_length = 8,
+				frame_count = 40,
+				animation_speed = 0.5,
+				width = 206,
+				height = 202,
+				shift = util.by_pixel(-4, -24),
+				tint = inputs.tint,
+				scale = 0.5
+			}
+		}
+		
+		table.insert(entity.animation.north.layers,entity_mask)
+		table.insert(entity.animation.north.layers,entity_highlights)
+		table.insert(entity.animation.east.layers,entity_mask)
+		table.insert(entity.animation.east.layers,entity_highlights)
+		table.insert(entity.animation.south.layers,entity_mask)
+		table.insert(entity.animation.south.layers,entity_highlights)
+		table.insert(entity.animation.west.layers,entity_mask)
+		table.insert(entity.animation.west.layers,entity_highlights)
+		
+		-- Fetch remnants
+		local remnant = data.raw.corpse[name.."-remnants"]
+		
+		-- Reskin remnants
+		remnant.animation = make_rotated_animation_variations_from_sheet(2,{
+			layers = {
+				-- Base
+				{
+					filename = "__P-U-M-P-S__/graphics/entity/water-pumpjack/remnants/water-pumpjack-remnants.png",
+					line_length = 1,
+					width = 138,
+					height = 142,
+					frame_count = 1,
+					direction_count = 1,
+					shift = util.by_pixel(0, 3),
+					hr_version = {
+						filename = "__P-U-M-P-S__/graphics/entity/water-pumpjack/remnants/hr-water-pumpjack-remnants.png",
+						line_length = 1,
+						width = 274,
+						height = 284,
+						frame_count = 1,
+						direction_count = 1,
+						shift = util.by_pixel(0, 3.5),
+						scale = 0.5,
+					}
+				},
+				-- Mask
+				{
+					filename = "__reskins-bobs__/graphics/entity/mining/pumpjack/remnants/pumpjack-remnants-mask.png",
+					line_length = 1,
+					width = 138,
+					height = 142,
+					frame_count = 1,
+					direction_count = 1,
+					shift = util.by_pixel(0, 3),
+					tint = inputs.tint,
+					hr_version = {
+						filename = "__reskins-bobs__/graphics/entity/mining/pumpjack/remnants/hr-pumpjack-remnants-mask.png",
+						line_length = 1,
+						width = 274,
+						height = 284,
+						frame_count = 1,
+						direction_count = 1,
+						shift = util.by_pixel(0, 3.5),
+						tint = inputs.tint,
+						scale = 0.5,
+					}
+				},
+				-- Highlights
+				{
+					filename = "__reskins-bobs__/graphics/entity/mining/pumpjack/remnants/pumpjack-remnants-highlights.png",
+					line_length = 1,
+					width = 138,
+					height = 142,
+					frame_count = 1,
+					direction_count = 1,
+					shift = util.by_pixel(0, 3),
+					blend_mode = reskins.lib.blend_mode, -- "additive",
+					hr_version = {
+						filename = "__reskins-bobs__/graphics/entity/mining/pumpjack/remnants/hr-pumpjack-remnants-highlights.png",
+						line_length = 1,
+						width = 274,
+						height = 284,
+						frame_count = 1,
+						direction_count = 1,
+						shift = util.by_pixel(0, 3.5),
+						blend_mode = reskins.lib.blend_mode, -- "additive",
+						scale = 0.5,
+					}
+				}
+			}
+		})
+		-- Label to skip to next iteration
+		::continue::
 	end
 end
 
@@ -999,6 +1183,370 @@ function animation_set.template_powered_animation() return
 			fluid_sprite_WEST,
 			glass_sprite_WEST,
 			legs_sprite_WEST
+		}
+	}
+}
+end
+function animation_set.water_pumpjack_animation() return
+{
+	north =
+	{
+		layers =
+		{
+			{
+				stripes = make_stripes (10*5, "__P-U-M-P-S__/graphics/entity/water-pumpjack/water-pumpjack_North-shadow.png"),
+				priority = "high",
+				frame_count = 40,
+				width = 110,
+				height = 111,
+				shift = util.by_pixel(6, 0.5),
+				draw_as_shadow = true,
+				hr_version =
+				{
+					stripes = make_stripes (10*5, "__P-U-M-P-S__/graphics/entity/water-pumpjack/hr-water-pumpjack_North-shadow.png"),
+					priority = "high",
+					frame_count = 40,
+					width = 220,
+					height = 220,
+					shift = util.by_pixel(6, 0.5),
+					draw_as_shadow = true,
+					scale = 0.5,
+				}
+			},
+			{
+				stripes = make_stripes (10*5, "__P-U-M-P-S__/graphics/entity/water-pumpjack/water-pumpjack_North-base.png"),
+				priority = "high",
+				frame_count = 40,
+				width = 131,
+				height = 137,
+				shift = util.by_pixel(-2.5, -4.5),
+				hr_version =
+				{
+					stripes = make_stripes (10*5, "__P-U-M-P-S__/graphics/entity/water-pumpjack/hr-water-pumpjack_North-base.png"),
+					priority = "high",
+					frame_count = 40,
+					width = 260,
+					height = 273,
+					shift = util.by_pixel(-2.25, -4.75),
+					scale = 0.5
+				}
+			},
+			{
+				filename = "__P-U-M-P-S__/graphics/entity/water-pumpjack/water-pumpjack-horsehead.png",
+				priority = "high",
+				line_length = 8,
+				frame_count = 40,
+				animation_speed = 0.5,
+				width = 104,
+				height = 102,
+				shift = util.by_pixel(-4, -24),
+				hr_version =
+				{
+					filename = "__P-U-M-P-S__/graphics/entity/water-pumpjack/hr-water-pumpjack-horsehead.png",
+					priority = "high",
+					line_length = 8,
+					frame_count = 40,
+					animation_speed = 0.5,
+					width = 206,
+					height = 202,
+					shift = util.by_pixel(-4, -24),
+					scale = 0.5
+				}
+			},
+			{
+				priority = "high",
+				filename = "__base__/graphics/entity/pumpjack/pumpjack-horsehead-shadow.png",
+				animation_speed = 0.5,
+				line_length = 8,
+				frame_count = 40,
+				width = 155,
+				height = 41,
+				shift = util.by_pixel(17.5, 14.5),
+				draw_as_shadow = true,
+				hr_version =
+				{
+					priority = "high",
+					filename = "__base__/graphics/entity/pumpjack/hr-pumpjack-horsehead-shadow.png",
+					line_length = 8,
+					frame_count = 40,
+					animation_speed = 0.5,
+					width = 309,
+					height = 82,
+					shift = util.by_pixel(17.75, 14.5),
+					draw_as_shadow = true,
+					scale = 0.5
+				}
+			}
+		}
+	},
+	east =
+	{
+		layers =
+		{
+			{
+				stripes = make_stripes (10*5, "__P-U-M-P-S__/graphics/entity/water-pumpjack/water-pumpjack_East-shadow.png"),
+				priority = "high",
+				frame_count = 40,
+				width = 110,
+				height = 111,
+				shift = util.by_pixel(6, 0.5),
+				draw_as_shadow = true,
+				hr_version =
+				{
+					stripes = make_stripes (10*5, "__P-U-M-P-S__/graphics/entity/water-pumpjack/hr-water-pumpjack_East-shadow.png"),
+					priority = "high",
+					frame_count = 40,
+					width = 220,
+					height = 220,
+					shift = util.by_pixel(6, 0.5),
+					draw_as_shadow = true,
+					scale = 0.5,
+				}
+			},
+			{
+				stripes = make_stripes (10*5, "__P-U-M-P-S__/graphics/entity/water-pumpjack/water-pumpjack_East-base.png"),
+				priority = "high",
+				frame_count = 40,
+				width = 131,
+				height = 137,
+				shift = util.by_pixel(-2.5, -4.5),
+				hr_version =
+				{
+					stripes = make_stripes (10*5, "__P-U-M-P-S__/graphics/entity/water-pumpjack/hr-water-pumpjack_East-base.png"),
+					priority = "high",
+					frame_count = 40,
+					width = 260,
+					height = 273,
+					shift = util.by_pixel(-2.25, -4.75),
+					scale = 0.5
+				}
+			},
+			{
+				filename = "__P-U-M-P-S__/graphics/entity/water-pumpjack/water-pumpjack-horsehead.png",
+				priority = "high",
+				line_length = 8,
+				frame_count = 40,
+				animation_speed = 0.5,
+				width = 104,
+				height = 102,
+				shift = util.by_pixel(-4, -24),
+				hr_version =
+				{
+					filename = "__P-U-M-P-S__/graphics/entity/water-pumpjack/hr-water-pumpjack-horsehead.png",
+					priority = "high",
+					line_length = 8,
+					frame_count = 40,
+					animation_speed = 0.5,
+					width = 206,
+					height = 202,
+					shift = util.by_pixel(-4, -24),
+					scale = 0.5
+				}
+			},
+			{
+				priority = "high",
+				filename = "__base__/graphics/entity/pumpjack/pumpjack-horsehead-shadow.png",
+				animation_speed = 0.5,
+				line_length = 8,
+				frame_count = 40,
+				width = 155,
+				height = 41,
+				shift = util.by_pixel(17.5, 14.5),
+				draw_as_shadow = true,
+				hr_version =
+				{
+					priority = "high",
+					filename = "__base__/graphics/entity/pumpjack/hr-pumpjack-horsehead-shadow.png",
+					line_length = 8,
+					frame_count = 40,
+					animation_speed = 0.5,
+					width = 309,
+					height = 82,
+					shift = util.by_pixel(17.75, 14.5),
+					draw_as_shadow = true,
+					scale = 0.5
+				}
+			}
+		}
+	},
+	south =
+	{
+		layers =
+		{
+			{
+				stripes = make_stripes (10*5, "__P-U-M-P-S__/graphics/entity/water-pumpjack/water-pumpjack_South-shadow.png"),
+				priority = "high",
+				frame_count = 40,
+				width = 110,
+				height = 111,
+				shift = util.by_pixel(6, 0.5),
+				draw_as_shadow = true,
+				hr_version =
+				{
+					stripes = make_stripes (10*5, "__P-U-M-P-S__/graphics/entity/water-pumpjack/hr-water-pumpjack_South-shadow.png"),
+					priority = "high",
+					frame_count = 40,
+					width = 220,
+					height = 220,
+					shift = util.by_pixel(6, 0.5),
+					draw_as_shadow = true,
+					scale = 0.5,
+				}
+			},
+			{
+				stripes = make_stripes (10*5, "__P-U-M-P-S__/graphics/entity/water-pumpjack/water-pumpjack_South-base.png"),
+				priority = "high",
+				frame_count = 40,
+				width = 131,
+				height = 137,
+				shift = util.by_pixel(-2.5, -4.5),
+				hr_version =
+				{
+					stripes = make_stripes (10*5, "__P-U-M-P-S__/graphics/entity/water-pumpjack/hr-water-pumpjack_South-base.png"),
+					priority = "high",
+					frame_count = 40,
+					width = 260,
+					height = 273,
+					shift = util.by_pixel(-2.25, -4.75),
+					scale = 0.5
+				}
+			},
+			{
+				filename = "__P-U-M-P-S__/graphics/entity/water-pumpjack/water-pumpjack-horsehead.png",
+				priority = "high",
+				line_length = 8,
+				frame_count = 40,
+				animation_speed = 0.5,
+				width = 104,
+				height = 102,
+				shift = util.by_pixel(-4, -24),
+				hr_version =
+				{
+					filename = "__P-U-M-P-S__/graphics/entity/water-pumpjack/hr-water-pumpjack-horsehead.png",
+					priority = "high",
+					line_length = 8,
+					frame_count = 40,
+					animation_speed = 0.5,
+					width = 206,
+					height = 202,
+					shift = util.by_pixel(-4, -24),
+					scale = 0.5
+				}
+			},
+			{
+				priority = "high",
+				filename = "__base__/graphics/entity/pumpjack/pumpjack-horsehead-shadow.png",
+				animation_speed = 0.5,
+				line_length = 8,
+				frame_count = 40,
+				width = 155,
+				height = 41,
+				shift = util.by_pixel(17.5, 14.5),
+				draw_as_shadow = true,
+				hr_version =
+				{
+					priority = "high",
+					filename = "__base__/graphics/entity/pumpjack/hr-pumpjack-horsehead-shadow.png",
+					line_length = 8,
+					frame_count = 40,
+					animation_speed = 0.5,
+					width = 309,
+					height = 82,
+					shift = util.by_pixel(17.75, 14.5),
+					draw_as_shadow = true,
+					scale = 0.5
+				}
+			}
+		}
+	},
+	west =
+	{
+		layers =
+		{
+			{
+				stripes = make_stripes (10*5, "__P-U-M-P-S__/graphics/entity/water-pumpjack/water-pumpjack_West-shadow.png"),
+				priority = "high",
+				frame_count = 40,
+				width = 110,
+				height = 111,
+				shift = util.by_pixel(6, 0.5),
+				draw_as_shadow = true,
+				hr_version =
+				{
+					stripes = make_stripes (10*5, "__P-U-M-P-S__/graphics/entity/water-pumpjack/hr-water-pumpjack_West-shadow.png"),
+					priority = "high",
+					frame_count = 40,
+					width = 220,
+					height = 220,
+					shift = util.by_pixel(6, 0.5),
+					draw_as_shadow = true,
+					scale = 0.5,
+				}
+			},
+			{
+				stripes = make_stripes (10*5, "__P-U-M-P-S__/graphics/entity/water-pumpjack/water-pumpjack_West-base.png"),
+				priority = "high",
+				frame_count = 40,
+				width = 131,
+				height = 137,
+				shift = util.by_pixel(-2.5, -4.5),
+				hr_version =
+				{
+					stripes = make_stripes (10*5, "__P-U-M-P-S__/graphics/entity/water-pumpjack/hr-water-pumpjack_West-base.png"),
+					priority = "high",
+					frame_count = 40,
+					width = 260,
+					height = 273,
+					shift = util.by_pixel(-2.25, -4.75),
+					scale = 0.5
+				}
+			},
+			{
+				filename = "__P-U-M-P-S__/graphics/entity/water-pumpjack/water-pumpjack-horsehead.png",
+				priority = "high",
+				line_length = 8,
+				frame_count = 40,
+				animation_speed = 0.5,
+				width = 104,
+				height = 102,
+				shift = util.by_pixel(-4, -24),
+				hr_version =
+				{
+					filename = "__P-U-M-P-S__/graphics/entity/water-pumpjack/hr-water-pumpjack-horsehead.png",
+					priority = "high",
+					line_length = 8,
+					frame_count = 40,
+					animation_speed = 0.5,
+					width = 206,
+					height = 202,
+					shift = util.by_pixel(-4, -24),
+					scale = 0.5
+				}
+			},
+			{
+				priority = "high",
+				filename = "__base__/graphics/entity/pumpjack/pumpjack-horsehead-shadow.png",
+				animation_speed = 0.5,
+				line_length = 8,
+				frame_count = 40,
+				width = 155,
+				height = 41,
+				shift = util.by_pixel(17.5, 14.5),
+				draw_as_shadow = true,
+				hr_version =
+				{
+					priority = "high",
+					filename = "__base__/graphics/entity/pumpjack/hr-pumpjack-horsehead-shadow.png",
+					line_length = 8,
+					frame_count = 40,
+					animation_speed = 0.5,
+					width = 309,
+					height = 82,
+					shift = util.by_pixel(17.75, 14.5),
+					draw_as_shadow = true,
+					scale = 0.5
+				}
+			}
 		}
 	}
 }

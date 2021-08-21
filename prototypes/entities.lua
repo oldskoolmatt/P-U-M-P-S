@@ -13,7 +13,9 @@ else
 	electric_priority = "secondary-input"
 end
 
--- Set common properties
+-- Set entity properties
+local crafting_categories = {"pump-water"}
+local fixed_recipe = "water-offshore"
 local collision_mask = {"object-layer", "train-layer"}
 local center_collision_mask = {"water-tile", "object-layer", "player-layer"}
 local collision_box = {{-0.6, -1.05}, {0.6, 0.3}}
@@ -73,7 +75,6 @@ local fluid_box = -- unpowered pump uses fluid_box
 	base_level = 1,
 	pipe_covers = pipecoverspictures(),
 	production_type = "output",
-	filter = "water",
 	pipe_connections =
 	{
 		{
@@ -118,7 +119,7 @@ local unpowered_pump_template =
 	graphics_set = graphics_set,
 	
 	-- Template common properties
-    collision_mask = collision_mask,
+	collision_mask = collision_mask,
 	center_collision_mask = center_collision_mask,
 	collision_box = collision_box,
 	selection_box = selection_box,
@@ -129,8 +130,8 @@ local unpowered_pump_template =
 	icon_size = icon_size,
 	icon_mipmaps = icon_mipmaps,
 	flags = flags,
-    corpse = corpse,
-    dying_explosion = dying_explosion,
+	corpse = corpse,
+	dying_explosion = dying_explosion,
 	alert_icon_shift = alert_icon_shift,
 	resistances = resistances,
 	damaged_trigger_effect = damaged_trigger_effect,
@@ -160,15 +161,14 @@ local burner_pump_template =
 	order = "8==D", -- yeah, it's a dick bitch!
 
 	-- Template unique properties
-	crafting_categories = {"pump-water"},
-    fixed_recipe = "pump-water",
 	energy_source = {type = "burner", fuel_category = "chemical", effectivity = 1, fuel_inventory_size = 1, emissions_per_minute = 3},
-	trigger_created_entity = true,
 	allowed_effects = {"consumption", "pollution"},
 	animation = animation,
 
 	-- Template common properties
-    collision_mask = collision_mask,
+	crafting_categories = crafting_categories,
+	fixed_recipe = fixed_recipe,
+	collision_mask = collision_mask,
 	center_collision_mask = center_collision_mask,
 	collision_box = collision_box,
 	selection_box = selection_box,
@@ -179,8 +179,8 @@ local burner_pump_template =
 	icon_size = icon_size,
 	icon_mipmaps = icon_mipmaps,
 	flags = flags,
-    corpse = corpse,
-    dying_explosion = dying_explosion,
+	corpse = corpse,
+	dying_explosion = dying_explosion,
 	alert_icon_shift = alert_icon_shift,
 	resistances = resistances,
 	damaged_trigger_effect = damaged_trigger_effect,
@@ -210,15 +210,14 @@ local powered_pump_template =
 	order = "8==D", -- yeah, it's a dick bitch!
 
 	-- Template unique properties
-	crafting_categories = {"pump-water"},
-    fixed_recipe = "pump-water",
 	energy_source = {type = "electric", usage_priority = electric_priority},
-	trigger_created_entity = true,
 	allowed_effects = {"consumption"},
 	animation = animation,
 
 	-- Template common properties
-    collision_mask = collision_mask,
+	crafting_categories = crafting_categories,
+	fixed_recipe = fixed_recipe,
+	collision_mask = collision_mask,
 	center_collision_mask = center_collision_mask,
 	collision_box = collision_box,
 	selection_box = selection_box,
@@ -229,8 +228,8 @@ local powered_pump_template =
 	icon_size = icon_size,
 	icon_mipmaps = icon_mipmaps,
 	flags = flags,
-    corpse = corpse,
-    dying_explosion = dying_explosion,
+	corpse = corpse,
+	dying_explosion = dying_explosion,
 	alert_icon_shift = alert_icon_shift,
 	resistances = resistances,
 	damaged_trigger_effect = damaged_trigger_effect,
@@ -404,3 +403,139 @@ else --error("\nDISABLING POWER REQUIREMENTS FOR OFFSHORE PUMPS BREAKS THE FIRST
 	offshore_pump_4.max_health = 300
 	data:extend({offshore_pump_4})
 end
+
+-- Remove template entities
+local remove_entity = require("utils.lib").remove_entity
+
+remove_entity("unpowered-offshore-template", "offshore-pump")
+remove_entity("burner-offshore-template", "assembling-machine")
+remove_entity("electric-offshore-template", "assembling-machine")
+
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+
+-- Fetch external properties
+local animation = require("utils.animation").water_pumpjack_animation()
+
+-- Set entity properties
+local fixed_recipe = "water-ground"
+local collision_mask = {"object-layer", "player-layer", "resource-layer"}
+local collision_box = {{ -1.2, -1.2}, {1.2, 1.2}}
+local selection_box = {{ -1.5, -1.5}, {1.5, 1.5}}
+local fast_replaceable_group = "water-pumpjacks"
+local drawing_box = {{-1.6, -2.5}, {1.5, 1.6}}
+local flags = {"placeable-neutral", "player-creation"}
+local dying_explosion = "pumpjack-explosion"
+local circuit_wire_connection_points = circuit_connector_definitions["pumpjack"].points
+local circuit_connector_sprites = circuit_connector_definitions["pumpjack"].sprites
+local allowed_effects = {"consumption"}
+local working_sound =
+{
+	sound =
+	{
+		{
+			filename = "__base__/sound/pumpjack.ogg",
+			volume = 0.45
+		}
+	},
+	match_volume_to_activity = true,
+	audible_distance_modifier = 0.5,
+	max_sounds_per_type = 3,
+	fade_in_ticks = 4,
+	fade_out_ticks = 20
+}
+local fluid_boxes =
+{
+	fluid_box =
+	{
+		base_area = 1,
+		base_level = 1,
+		pipe_covers = pipecoverspictures(),
+		production_type = "output",
+		pipe_connections =
+		{
+			{
+				positions = { {1, -2}, {2, -1}, {-1, 2}, {-2, 1} }
+			}
+		}
+	},
+	off_when_no_fluid_recipe = false
+}
+local energy_source =
+{
+	type = "electric",
+	usage_priority = electric_priority
+}
+local corpse =
+{
+	type = "corpse",
+	name = "water-pumpjack-1-remnants",
+	animation = make_rotated_animation_variations_from_sheet(2,
+	{
+		layers =
+		{
+			{
+				filename = "__P-U-M-P-S__/graphics/entity/water-pumpjack/remnants/water-pumpjack-remnants.png",
+				line_length = 1,
+				width = 138,
+				height = 142,
+				frame_count = 1,
+				direction_count = 1,
+				shift = util.by_pixel(0, 3),
+				hr_version =
+				{
+					filename = "__P-U-M-P-S__/graphics/entity/water-pumpjack/remnants/hr-water-pumpjack-remnants.png",
+					line_length = 1,
+					width = 274,
+					height = 284,
+					frame_count = 1,
+					direction_count = 1,
+					shift = util.by_pixel(0, 3.5),
+					scale = 0.5,
+				}
+			}
+		}
+	})
+}	data:extend({corpse}) local corpse = "water-pumpjack-1-remnants"
+
+-- Make water pumpjack
+local water_pumpjack =
+{
+	-- Water pumpjack base properties
+	type = "assembling-machine",
+	name = "water-pumpjack-1",
+	icon = "__P-U-M-P-S__/graphics/icons/water-pumpjack.png",
+	minable = {mining_time = 1, result = "water-pumpjack-1"},
+	max_health = 200,
+	crafting_speed = 1,
+	energy_usage = "300kW",
+	order = "8==D", -- yeah, it's a dick bitch!
+
+	-- Water pumpjack properties
+	crafting_categories = crafting_categories,
+	fixed_recipe = fixed_recipe,
+	collision_mask = collision_mask,
+	collision_box = collision_box,
+	selection_box = selection_box,
+	fast_replaceable_group = fast_replaceable_group,
+	drawing_box = drawing_box,
+	icon_size = icon_size,
+	icon_mipmaps = icon_mipmaps,
+	flags = flags,
+	corpse = corpse,
+	dying_explosion = dying_explosion,
+	resistances = resistances,
+	damaged_trigger_effect = damaged_trigger_effect,
+	circuit_wire_connection_points = circuit_wire_connection_points,
+	circuit_connector_sprites = circuit_connector_sprites,
+	circuit_wire_max_distance = default_circuit_wire_max_distance,
+	squeak_behaviour = squeak_behaviour,
+	allowed_effects = allowed_effects,
+	energy_source = energy_source,
+	fluid_boxes = fluid_boxes,
+	animation = animation,
+	open_sound = open_sound,
+	close_sound = close_sound,
+	vehicle_impact_sound =  vehicle_impact_sound,
+	working_sound = working_sound
+}	data:extend({water_pumpjack})

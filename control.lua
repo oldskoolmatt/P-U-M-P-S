@@ -1,11 +1,33 @@
+---------------------
+---- control.lua ----
+---------------------
+
 -- Set placeholder table
 local placeholder_table =
 {
-	["offshore-pump-0-placeholder"] = "offshore-pump-0",
+	["offshore-pump-0-placeholder"] ="offshore-pump-0",
 	["offshore-pump-1-placeholder"] = "offshore-pump-1",
 	["offshore-pump-2-placeholder"] = "offshore-pump-2",
 	["offshore-pump-3-placeholder"] = "offshore-pump-3",
 	["offshore-pump-4-placeholder"] = "offshore-pump-4"
+}
+
+-- Set entity table
+local entity_table =
+{
+	"offshore-pump-0",
+	"offshore-pump-1",
+	"offshore-pump-2",
+	"offshore-pump-3",
+	"offshore-pump-4"
+}
+
+-- Set boiler exceptions
+local boiler_exceptions =
+{
+	"oil-superheater",	-- Superheating
+	"superheater",		-- Superheating
+	"pre-heated-heat-exchanger",	-- Pre-heated Exchanger
 }
 
 -- Entity control function 
@@ -13,10 +35,15 @@ function on_built_entity(event)
 
 	-- Boilers start with 10 water
 	if settings.global["boiler-start-water"].value == true then
-		if event.created_entity.type == "boiler" then
+		if event.created_entity.type == "boiler" then	
+			for _, exception in pairs (boiler_exceptions) do
+				if event.created_entity.name == exception then goto skip end
+			end
 			event.created_entity.insert_fluid({name = "water", amount = 10})
+			::skip::
 		end
 	end
+
 	-- Replace placeholder with actual entity
 	if event.created_entity.type == "offshore-pump" then
 		local placeholder = event.created_entity or event.entity
@@ -46,20 +73,10 @@ end
 script.on_event(defines.events.on_built_entity, on_built_entity)
 script.on_event(defines.events.on_robot_built_entity, on_built_entity)
 
--- Set rebuild list
-local rebuild_list =
-{
-	"offshore-pump-0",
-	"offshore-pump-1",
-	"offshore-pump-2",
-	"offshore-pump-3",
-	"offshore-pump-4"
-}
-
 -- Rebuild offshore pumps on load to prevent pipe detachment on settings change
 script.on_configuration_changed(function(data)
-	for _, surface in pairs (game.surfaces, rebuild_list) do
-		local offshore_pumps = surface.find_entities_filtered{name = rebuild_list}
+	for _, surface in pairs (game.surfaces, entity_table) do
+		local offshore_pumps = surface.find_entities_filtered{name = entity_table}
 		for _, old_pump in pairs (offshore_pumps) do
 
 			local name = old_pump.name
