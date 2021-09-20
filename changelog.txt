@@ -1,4 +1,27 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.42
+Date: 20.09. 2021
+  Bugfixes:
+    - Fixed a crash on load game during migration process
+    - Fixed a possible crash on startup caused by other mode editing collision masks
+---------------------------------------------------------------------------------------------------
+Version: 1.1.41
+Date: 13.09. 2021
+  Changes:
+    - Lowered prototype removal to data-updates for better compatibility
+  Bugfixes:
+    - Osm lib is now required (i mistakenly put it as optional dependency)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.40
+Date: 12.09. 2021
+  Changes:
+    - Rebuilt internal structure, now requires my function library to work
+---------------------------------------------------------------------------------------------------
+Version: 1.1.33
+Date: 31. 08. 2021
+  Bugfixes:
+    - Fixed a crash on startup related to a missing IF check
+---------------------------------------------------------------------------------------------------
 Version: 1.1.32
 Date: 21. 08. 2021
   Changes:

@@ -2,11 +2,15 @@
 ---- data.lua ----
 ------------------
 
+-- Local functions host
+local OSM_local = require("utils.lib")
+local OSM_anim = require("utils.animation")
+
 -- Fetch external properties
-local graphics_set = require("utils.animation").template_unpowered_animation() -- unpowered pump uses graphics_set
-local animation = require("utils.animation").template_powered_animation() -- powered pump uses animation
+local graphics_set = OSM_anim.template_unpowered_animation() -- unpowered pump uses graphics_set
+local animation = OSM_anim.template_powered_animation() -- powered pump uses animation
 local hit_effects = require("__base__.prototypes.entity.hit-effects")
-local electric_priority
+local electric_priority = {}
 if settings.startup ["power-priority"].value == true then
 	electric_priority = "primary-input"
 else
@@ -256,8 +260,9 @@ if settings.startup ["enable-power"].value == true then
 	offshore_placeholder_0.minable = {mining_time = 0.1, result = "offshore-pump-0"}
 	offshore_placeholder_0.max_health = 100
 	offshore_placeholder_0.pumping_speed = 5
+	offshore_placeholder_0.flags = {"hidden"}
 	data:extend({offshore_placeholder_0})
-	
+
 	local offshore_pump_0 = table.deepcopy(data.raw["assembling-machine"]["burner-offshore-template"]) -- Offshore pump burner
 	offshore_pump_0.name = "offshore-pump-0"
 	offshore_pump_0.subgroup = "other"
@@ -275,10 +280,10 @@ if settings.startup ["enable-power"].value == true then
 	offshore_placeholder_1.minable = {mining_time = 0.1, result = "offshore-pump-1"}
 	offshore_placeholder_1.max_health = 150
 	offshore_placeholder_1.pumping_speed = 20
+	offshore_placeholder_1.flags = {"hidden"}
 	data:extend({offshore_placeholder_1})
 	
 	local offshore_pump_1 = table.deepcopy(data.raw["assembling-machine"]["electric-offshore-template"]) -- Offshore pump 1
-	offshore_pump_1.next_upgrade = "offshore-pump-2-placeholder"
 	offshore_pump_1.name = "offshore-pump-1"
 	offshore_pump_1.subgroup = "other"
 	offshore_pump_1.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-1.png"
@@ -296,10 +301,10 @@ if settings.startup ["enable-power"].value == true then
 	offshore_placeholder_2.minable = {mining_time = 0.1, result = "offshore-pump-2"}
 	offshore_placeholder_2.max_health = 200
 	offshore_placeholder_2.pumping_speed = 40
+	offshore_placeholder_2.flags = {"hidden"}
 	data:extend({offshore_placeholder_2})
 	
 	local offshore_pump_2 = table.deepcopy(data.raw["assembling-machine"]["electric-offshore-template"]) -- Offshore pump 2
-	offshore_pump_2.next_upgrade = "offshore-pump-3-placeholder"
 	offshore_pump_2.name = "offshore-pump-2"
 	offshore_pump_2.subgroup = "other"
 	offshore_pump_2.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-2.png"
@@ -317,10 +322,10 @@ if settings.startup ["enable-power"].value == true then
 	offshore_placeholder_3.minable = {mining_time = 0.1, result = "offshore-pump-3"}
 	offshore_placeholder_3.max_health = 250
 	offshore_placeholder_3.pumping_speed = 60
+	offshore_placeholder_3.flags = {"hidden"}
 	data:extend({offshore_placeholder_3})
 	
 	local offshore_pump_3 = table.deepcopy(data.raw["assembling-machine"]["electric-offshore-template"]) -- Offshore pump 3
-	offshore_pump_3.next_upgrade = "offshore-pump-4-placeholder"
 	offshore_pump_3.name = "offshore-pump-3"
 	offshore_pump_3.subgroup = "other"
 	offshore_pump_3.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-3.png"
@@ -338,6 +343,7 @@ if settings.startup ["enable-power"].value == true then
 	offshore_placeholder_4.minable = {mining_time = 0.1, result = "offshore-pump-4"}
 	offshore_placeholder_4.max_health = 300
 	offshore_placeholder_4.pumping_speed = 80
+	offshore_placeholder_4.flags = {"hidden"}
 	data:extend({offshore_placeholder_4})
 
 	local offshore_pump_4 = table.deepcopy(data.raw["assembling-machine"]["electric-offshore-template"]) -- Offshore pump 4
@@ -363,7 +369,6 @@ else --error("\nDISABLING POWER REQUIREMENTS FOR OFFSHORE PUMPS BREAKS THE FIRST
 
 	-- Make absolutely-fine-perpetual-motion water-thing 1
 	local offshore_pump_1 = table.deepcopy(data.raw["offshore-pump"]["unpowered-offshore-template"])
-	offshore_pump_1.next_upgrade = "offshore-pump-2"
 	offshore_pump_1.name = "offshore-pump-1"
 	offshore_pump_1.minable = {mining_time = 0.1, result = "offshore-pump-1"}
 	offshore_pump_1.placeable_by = {item = "offshore-pump-1", count = 1}
@@ -373,7 +378,6 @@ else --error("\nDISABLING POWER REQUIREMENTS FOR OFFSHORE PUMPS BREAKS THE FIRST
 
 	-- Make absolutely-fine-perpetual-motion water-thing 2
 	local offshore_pump_2 = table.deepcopy(data.raw["offshore-pump"]["unpowered-offshore-template"])
-	offshore_pump_2.next_upgrade = "offshore-pump-3"
 	offshore_pump_2.name = "offshore-pump-2"
 	offshore_pump_2.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-2.png"
 	offshore_pump_2.minable = {mining_time = 0.1, result = "offshore-pump-2"}
@@ -384,7 +388,6 @@ else --error("\nDISABLING POWER REQUIREMENTS FOR OFFSHORE PUMPS BREAKS THE FIRST
 
 	-- Make absolutely-fine-perpetual-motion water-thing 3
 	local offshore_pump_3 = table.deepcopy(data.raw["offshore-pump"]["unpowered-offshore-template"])
-	offshore_pump_3.next_upgrade = "offshore-pump-4"
 	offshore_pump_3.name = "offshore-pump-3"
 	offshore_pump_3.icon = "__P-U-M-P-S__/graphics/icons/offshore-pump-3.png"
 	offshore_pump_3.minable = {mining_time = 0.1, result = "offshore-pump-3"}
@@ -405,17 +408,15 @@ else --error("\nDISABLING POWER REQUIREMENTS FOR OFFSHORE PUMPS BREAKS THE FIRST
 end
 
 -- Remove template entities
-local remove_entity = require("utils.lib").remove_entity
-
-remove_entity("unpowered-offshore-template", "offshore-pump")
-remove_entity("burner-offshore-template", "assembling-machine")
-remove_entity("electric-offshore-template", "assembling-machine")
+data.raw["offshore-pump"]["unpowered-offshore-template"] = nil
+data.raw["assembling-machine"]["burner-offshore-template"] = nil
+data.raw["assembling-machine"]["electric-offshore-template"] = nil
 
 ----------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------
 
 -- Fetch external properties
-local animation = require("utils.animation").water_pumpjack_animation()
+local animation = OSM_anim.water_pumpjack_animation()
 
 -- Set entity properties
 local fixed_recipe = "water-ground"

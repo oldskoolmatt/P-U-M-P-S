@@ -43,8 +43,8 @@ local upgrade_table =
 -- Do bobmining stuff
 if mods ["bobmining"] then
 
-	local old_miner
-	local old_jack
+	local old_miner = {}
+	local old_jack = {}
 
 	-- Assign energy usage
 	local power_draw_table =
@@ -84,7 +84,7 @@ if mods ["bobmining"] then
 		end
 
 		-- Technology
-		if data.raw.technology[water_miner] then
+		if data.raw.technology[water_miner] and not mods ["angelsrefining"] then
 
 			-- Add ground water pumpjacks to bobmining techs
 			data.raw.technology["water-pumpjack"] = nil

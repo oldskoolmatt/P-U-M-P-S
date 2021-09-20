@@ -1,3 +1,6 @@
+
+if not mods ["bobmining"] then return end
+
 if not data.raw["resource-category"]["water"] then
 	local resource_category = util.table.deepcopy(data.raw["resource-category"]["basic-fluid"])
 	resource_category.name = "water"

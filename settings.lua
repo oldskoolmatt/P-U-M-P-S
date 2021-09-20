@@ -1,5 +1,4 @@
 ----------------------
------ initialise -----
 ---- settings.lua ----
 ----------------------
 
@@ -19,6 +18,13 @@ data:extend({
 		default_value = false,
 		order = "b-8==D"
 	},
+--[[	{
+		type = "bool-setting",
+		name = "safe-mode", -- enable offshore pump upgrading
+		setting_type = "startup",
+		default_value = false,
+		order = "b-8==D"
+	},--]]
 	{
 		type = "bool-setting",
 		name = "boiler-start-water", -- spawn boiler with 10 water

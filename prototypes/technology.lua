@@ -2,14 +2,11 @@
 ---- data.lua ----
 ------------------
 
--- Fetch functions from library
-local add_tech_recipe = require ("utils.lib").add_tech_recipe
-
 -- Offshore pump 1
-add_tech_recipe ("fluid-handling", "offshore-pump-1")
+OSM.lib.technology.add_unlock("offshore-pump-1", "fluid-handling")
 
 -- Offshore pump 2
-local offshore_technology_pump_2 =
+local offshore_technology_pump =
 {
 	type = "technology",
 	name = "offshore-pump-tech_2",
@@ -29,10 +26,10 @@ local offshore_technology_pump_2 =
 		time = 30
 	},
 	order = "d-a-a"
-}	data:extend({offshore_technology_pump_2})
+}	data:extend({offshore_technology_pump})
 
 -- Offshore pump 3
-local offshore_technology_pump_3 =
+local offshore_technology_pump =
 {
 	type = "technology",
 	name = "offshore-pump-tech_3",
@@ -53,10 +50,10 @@ local offshore_technology_pump_3 =
 		time = 30
 	},
 	order = "d-a-b"
-}	data:extend({offshore_technology_pump_3})
+}	data:extend({offshore_technology_pump})
 
 -- Offshore pump 4
-local offshore_technology_pump_4 =
+local offshore_technology_pump =
 {
 	type = "technology",
 	name = "offshore-pump-tech_4",
@@ -78,10 +75,10 @@ local offshore_technology_pump_4 =
 		time = 30
 	},
 	order = "d-a-b"
-}	data:extend({offshore_technology_pump_4})
+}	data:extend({offshore_technology_pump})
 
 -- Water pumpjack
-local ground_water_treatment =
+local ground_water_pumpjack =
 {
 	type = "technology",
 	name = "water-pumpjack",
@@ -103,4 +100,4 @@ local ground_water_treatment =
 		{type = "unlock-recipe", recipe = "water-pumpjack-1"}
 	},
 	order = "d-a-d-1",
-}	data:extend({ground_water_treatment})
+}	data:extend({ground_water_pumpjack})

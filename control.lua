@@ -5,7 +5,7 @@
 -- Set placeholder table
 local placeholder_table =
 {
-	["offshore-pump-0-placeholder"] ="offshore-pump-0",
+	["offshore-pump-0-placeholder"] = "offshore-pump-0",
 	["offshore-pump-1-placeholder"] = "offshore-pump-1",
 	["offshore-pump-2-placeholder"] = "offshore-pump-2",
 	["offshore-pump-3-placeholder"] = "offshore-pump-3",
