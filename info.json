@@ -1,18 +1,19 @@
 {
  "name": "P-U-M-P-S",
- "version": "1.1.42",
+ "version": "1.1.51",
  "factorio_version": "1.1",
  "title": "Offshore P.U.M.P.S. and ground water",
  "author": "OldSkoolMatt",
- "homepage": "",
+ "homepage": "https://mods.factorio.com/mod/P-U-M-P-S",
  "dependencies":
 	[
 	  "base >= 1.1.0",
-	  "osm-lib >= 1.1.13",
+	  "osm-lib >= 1.1.17",
 	  "? bobores >= 1.1.0",
 	  "? boblogistics >= 1.1.2",
 	  "? bobmining >= 1.1.3",
 	  "? bobplates >= 1.1.2",
+	  "? angelsrefining >= 0.12.1",
 	  "! higher-tier-offshore-pumps",
 	  "! BurnerOffshorePump",
 	  "! PumpAnywhere",

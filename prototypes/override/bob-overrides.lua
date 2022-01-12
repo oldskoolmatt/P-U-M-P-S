@@ -12,144 +12,101 @@ local remove_tech_recipe_unlock = bobmods.lib.tech.remove_recipe_unlock
 local replace_recipe_ingredient = bobmods.lib.recipe.replace_ingredient
 local replace_science_pack = bobmods.lib.tech.replace_science_pack
 
--- Setup water pumpjack host table
-local water_miners_table =
-{
-	["water-miner-1"] = "water-pumpjack-1",
-	["water-miner-2"] = "water-pumpjack-2",
-	["water-miner-3"] = "water-pumpjack-3",
-	["water-miner-4"] = "water-pumpjack-4",
-	["water-miner-5"] = "water-pumpjack-5"
-}
+local water_miner_setting = settings.startup["bobmods-mining-waterminers"]
+local oil_miner_setting = settings.startup["bobmods-mining-pumpjacks"]
 
-local upgrade_table =
-{
-	["water-miner-1"] = "water-miner-2",
-	["water-miner-2"] = "water-miner-3",
-	["water-miner-3"] = "water-miner-4",
-	["water-miner-4"] = "water-miner-5",
-	
-	["water-pumpjack-1"] = "water-pumpjack-2",
-	["water-pumpjack-2"] = "water-pumpjack-3",
-	["water-pumpjack-3"] = "water-pumpjack-4",
-	["water-pumpjack-4"] = "water-pumpjack-5",
-	
-	["pumpjack"] = "bob-pumpjack-1",
-	["bob-pumpjack-1"] = "bob-pumpjack-2",
-	["bob-pumpjack-2"] = "bob-pumpjack-3",
-	["bob-pumpjack-3"] = "bob-pumpjack-4"
-}
 
--- Do bobmining stuff
-if mods ["bobmining"] then
+-- Do bob's water pumpjacks stuff
+if water_miner_setting and water_miner_setting.value == true then
 
-	local old_miner = {}
-	local old_jack = {}
-
-	-- Assign energy usage
-	local power_draw_table =
+	-- Water miners list
+	local water_miners =
 	{
-		["water-pumpjack-2"] = "550kW",
-		["water-pumpjack-3"] = "750kW",
-		["water-pumpjack-4"] = "1000kW",
-		["water-pumpjack-5"] = "1250kW"
+		["water-miner-1"] = "water-miner-2",
+		["water-miner-2"] = "water-miner-3",
+		["water-miner-3"] = "water-miner-4",
+		["water-miner-4"] = "water-miner-5",
+		["water-miner-5"] = ""
 	}
 
-	-- Generate higher tier ground water pumpjacks
-	for water_miner, pumpjack in pairs(water_miners_table) do
-
-		-- Entity
-		if data.raw["mining-drill"][water_miner] then		
-			local entity = table.deepcopy(data.raw["assembling-machine"]["water-pumpjack-1"])
-			entity.name = pumpjack
-			entity.minable.result = pumpjack
-			entity.crafting_speed = data.raw["mining-drill"][water_miner].mining_speed
-			data:extend({entity})
-		end
-
-		-- Item
-		if data.raw.item[water_miner] then
-			local item = table.deepcopy(data.raw.item["water-pumpjack-1"])
-			item.name = pumpjack
-			item.place_result = pumpjack
-			data:extend({item})
-		end
-
-		-- Recipe
-		if data.raw.recipe[water_miner] then
-			local recipe = table.deepcopy(data.raw.recipe[water_miner])
-			recipe.name = pumpjack
-			recipe.result = pumpjack
-			data:extend({recipe})
-		end
-
-		-- Technology
-		if data.raw.technology[water_miner] and not mods ["angelsrefining"] then
-
-			-- Add ground water pumpjacks to bobmining techs
-			data.raw.technology["water-pumpjack"] = nil
-			add_tech_recipe_unlock(water_miner, pumpjack)
-
-			-- Replace bobmining tech icon
-			data.raw.technology[water_miner].icon = "__P-U-M-P-S__/graphics/technology/water-pumpjack.png"
-			data.raw.technology[water_miner].icon_size = 256
-			data.raw.technology[water_miner].icon_mipmaps = 4
-		end
-
-		-- Replace ingredient with appropriate pumpjack
-		replace_recipe_ingredient(pumpjack, old_miner, old_jack)
-		old_miner = water_miner
-		old_jack = pumpjack 
-	end
-
-	-- Assign correct energy usage to ground water pumpjacks
-	for pumpjack, energy_usage in pairs(power_draw_table) do
-		if data.raw.item[pumpjack] then
-			data.raw["assembling-machine"][pumpjack].energy_usage = energy_usage
-		end
-	end
-	
-	-- Make  water pumpjacks upgradable
-	for water_miner, _ in pairs(water_miners_table) do
+	-- Assign fast replaceable group
+	for water_miner, _ in pairs(water_miners) do
 		if data.raw["mining-drill"][water_miner] then
 			data.raw["mining-drill"][water_miner].fast_replaceable_group = "water-miner"
 		end
 	end
-	
-	-- Assign upgraded pumpjack
-	for water_miner, upgrade in pairs(upgrade_table) do
-		if data.raw["mining-drill"][water_miner] and data.raw["mining-drill"][upgrade] then
-			data.raw["mining-drill"][water_miner].next_upgrade = upgrade
-		elseif data.raw["assembling-machine"][water_miner] and data.raw["assembling-machine"][upgrade] then
-			data.raw["assembling-machine"][water_miner].next_upgrade = upgrade
-		end
-	end
 
-	-- Restrict bob's water pumpjacks to lithia water or get rid of them
+	-- Restrict bob's water pumpjacks to lithia water
 	if data.raw.resource["lithia-water"] then
 		local resource_category = util.table.deepcopy(data.raw["resource-category"]["basic-fluid"])
 		resource_category.name = "bob-lithia-water"
 		data:extend({resource_category})
 
-		for water_miner, _ in pairs(water_miners_table) do
-			data.raw["mining-drill"][water_miner].resource_categories = {"bob-lithia-water"}
-			data.raw["resource"]["lithia-water"].category = "bob-lithia-water"
+		for water_miner, _ in pairs(water_miners) do
+			if data.raw["mining-drill"][water_miner] then
+				data.raw["mining-drill"][water_miner].resource_categories = {"bob-lithia-water"}
+				data.raw["resource"]["lithia-water"].category = "bob-lithia-water"
+			end
 		end
-	else
-		for water_miner, _ in pairs(water_miners_table) do
-			remove_tech_recipe_unlock(water_miner, water_miner)
-			data.raw.recipe[water_miner] = nil
-			data.raw.item[water_miner] = nil
-			data.raw["mining-drill"][water_miner] = nil
+	end
+
+	-- Make water pumpjacks upgradeable
+	for water_miner, upgrade in pairs(water_miners) do
+		if data.raw.item[water_miner] and (not data.raw.item[water_miner].OSM_removed or data.raw.item[water_miner].OSM_removed == false) then
+			if data.raw["mining-drill"][water_miner] and data.raw["mining-drill"][upgrade] then
+				data.raw["mining-drill"][water_miner].next_upgrade = upgrade
+			end
 		end
+	end
+
+	-- Adjust tech
+	local water_pumpjack_setting = settings.startup["osm-pumps-enable-ground-water-pumpjacks"]
+	if water_pumpjack_setting and water_pumpjack_setting.value == true then
+	
+		local disable_prototype = OSM.lib.prototype.disable_prototype
+		
+		-- Add
+		add_tech_recipe_unlock("water-pumpjack-1", "water-miner-1")
+		add_tech_recipe_unlock("water-pumpjack-2", "water-miner-2")
+		add_tech_recipe_unlock("water-pumpjack-3", "water-miner-3")
+		add_tech_recipe_unlock("water-pumpjack-4", "water-miner-4")
+		add_tech_recipe_unlock("water-pumpjack-5", "water-miner-5")
+		disable_prototype("water-miner-1", "technology")
+		disable_prototype("water-miner-2", "technology")
+		disable_prototype("water-miner-3", "technology")
+		disable_prototype("water-miner-4", "technology")
+		disable_prototype("water-miner-5", "technology")
 	end
 end
 
--- Use copper pipes for water pumpjacks
-if data.raw.item["copper-pipe"] then
-	for _, pumpjack in pairs(water_miners_table) do
-		if data.raw.recipe[pumpjack] then
-			replace_recipe_ingredient(pumpjack, "pipe", "copper-pipe")
+-- Do bob's oil pumpjacks stuff
+if oil_miner_setting and oil_miner_setting.value == true then
+
+	-- Oil pumpjacks list
+	local oil_miners =
+	{
+		["pumpjack"] = "bob-pumpjack-1",
+		["bob-pumpjack-1"] = "bob-pumpjack-2",
+		["bob-pumpjack-2"] = "bob-pumpjack-3",
+		["bob-pumpjack-3"] = "bob-pumpjack-4",
+		["bob-pumpjack-4"] = ""
+	}
+
+	-- Assign fast replaceable group
+	for pumpjack, _ in pairs(oil_miners) do
+		if data.raw["mining-drill"][pumpjack] then
+			data.raw["mining-drill"][pumpjack].fast_replaceable_group = "oil-pumpjack"
+		end
+	end
+
+	-- Make oil pumpjacks upgradeable
+	for pumpjack, upgrade in pairs(oil_miners) do
+		if data.raw.item[pumpjack] and (not data.raw.item[pumpjack].OSM_removed or data.raw.item[pumpjack].OSM_removed == false) then
+			if data.raw["mining-drill"][pumpjack] and data.raw["mining-drill"][upgrade] then
+				data.raw["mining-drill"][pumpjack].next_upgrade = upgrade
+			elseif data.raw["assembling-machine"][pumpjack] and data.raw["assembling-machine"][upgrade] then
+				data.raw["assembling-machine"][pumpjack].next_upgrade = upgrade
+			end
 		end
 	end
 end
@@ -157,11 +114,6 @@ end
 -- Remove bob's inconsistent ground water patches
 if data.raw.resource["ground-water"] then
 	data.raw.resource["ground-water"] = nil
-end
-	
--- Replace science packs for bobs tech
-if data.raw.tool["advanced-logistic-science-pack"] then
-	replace_science_pack("offshore-pump-tech_4", "production-science-pack", "advanced-logistic-science-pack")
 end
 
 -- Edit recipes and techs for bob mods
@@ -185,17 +137,17 @@ if data.raw.item["titanium-plate"] and data.raw.item["nitinol-alloy"] then
 
 	-- Reassign techs
 	if data.raw.technology["bob-fluid-handling-2"] and data.raw.technology["bob-fluid-handling-3"] and data.raw.technology["bob-fluid-handling-4"] then
-		replace_tech_prerequisite ("offshore-pump-tech_2", "fluid-handling", "bob-fluid-handling-2")
-		add_tech_prerequisite("offshore-pump-tech_3", "bob-fluid-handling-3")
-		add_tech_prerequisite("offshore-pump-tech_4", "bob-fluid-handling-4")
+		replace_tech_prerequisite ("offshore-pump-2", "fluid-handling", "bob-fluid-handling-2")
+		add_tech_prerequisite("offshore-pump-3", "bob-fluid-handling-3")
+		add_tech_prerequisite("offshore-pump-4", "bob-fluid-handling-4")
 	else
-		add_tech_prerequisite("offshore-pump-tech_3", "titanium-processing")
-		add_tech_prerequisite("offshore-pump-tech_4", "nitinol-processing")
+		add_tech_prerequisite("offshore-pump-3", "titanium-processing")
+		add_tech_prerequisite("offshore-pump-4", "nitinol-processing")
 	end
 end
 
 if data.raw.technology["advanced-electronics-2"] and data.raw.technology["advanced-electronics-3"] then
-	add_tech_prerequisite("offshore-pump-tech_2", "advanced-electronics")
-	replace_tech_prerequisite ("offshore-pump-tech_3", "advanced-electronics", "advanced-electronics-2")
-	replace_tech_prerequisite ("offshore-pump-tech_4", "advanced-electronics-2", "advanced-electronics-3")
+	add_tech_prerequisite("offshore-pump-2", "advanced-electronics")
+	replace_tech_prerequisite ("offshore-pump-3", "advanced-electronics", "advanced-electronics-2")
+	replace_tech_prerequisite ("offshore-pump-4", "advanced-electronics-2", "advanced-electronics-3")
 end

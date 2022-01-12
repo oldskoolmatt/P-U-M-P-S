@@ -1,4 +1,57 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.51
+Date: 12.01. 2022
+  Info:
+    - Changed some internal names to make them unique
+---------------------------------------------------------------------------------------------------
+Version: 1.1.50
+Date: 12.01. 2022
+  Features:
+    - Angel's seafloor pump is now affected by powering options
+    - Angel's ground water pump is now affected by powering options
+  Changes:
+    - Ground water pumpjacks can now be enabled/disabled from startup options regardless of bob mining settings
+    - Ground water pumpjacks will output Mud Water if Angel's Refining is installed
+    - Tier 1 offshore pump can be set to use electricity or burnable fuel from options
+  Info:
+    - Locale file rework
+    - Code clean up and general optimization
+  Bugfixes:
+    - Technology requirements now show up as they should
+    - Technology descriptions now show up as they should
+    - Mining a ground pumpjack will return the correct pumpjack
+---------------------------------------------------------------------------------------------------
+Version: 1.1.47
+Date: 06.01. 2022
+  Bugfixes:
+    - Fixed a crash caused by a badly declared variable
+---------------------------------------------------------------------------------------------------
+Version: 1.1.46
+Date: 05.01. 2022
+  Changes:
+    - Changed an internal name to match Kirazy's references to prevent a crash on startup
+---------------------------------------------------------------------------------------------------
+Version: 1.1.45
+Date: 30.09. 2021
+  Info:
+    - Changed internal structure to conform with library update and better compatibility
+  Bugfixes:
+    - Fixed a crash with "Omni Compression"
+---------------------------------------------------------------------------------------------------
+Version: 1.1.44
+Date: 27.09. 2021
+  Changes:
+    - If "boilers start with water" is turned on, the script will check that the boiler is meant to contain water before inserting any water inside of it
+  Bugfixes:
+    - Autorotate on pump placement now works as it should
+---------------------------------------------------------------------------------------------------
+Version: 1.1.42
+Date: 20.09. 2021
+  Bugfixes:
+    - Added another condition check in migration script (prevents crashes on load)
+    - Fixed a migration crash with "Angels Refining"
+    - No more duplicate ground water techs when using "Angels Refining"
+---------------------------------------------------------------------------------------------------
 Version: 1.1.42
 Date: 20.09. 2021
   Bugfixes:

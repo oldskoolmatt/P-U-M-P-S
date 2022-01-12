@@ -5,24 +5,8 @@
 -- Setup animation host
 local animation_set = {}
 
--- Enlist entity names
-local entity_table =
-{
-	"offshore-pump-0",
-	"offshore-pump-2",
-	"offshore-pump-3",
-	"offshore-pump-4"
-}
-
 -- Store animation functions
-local function make_stripes(count, filename)
-	 local stripe = {filename=filename, width_in_frames = 1, height_in_frames = 1}
-	 local stripes = {}
-	for i = 1, count do
-		stripes[i] = stripe
-	end
-	return stripes
-end
+local make_stripes = OSM.utils.make_stripes
 
 -- Underwater sprite set
 local underwater_sprite_NORTH =
@@ -573,32 +557,32 @@ local legs_sprite_WEST =
 }
 
 -- Recolor Masks
-function animation_set.assign_offshore_color()
-	for _, entity_name in pairs (entity_table) do
+function animation_set.assign_tier_color()
 
-		local mask_unpowered
-		local mask_powered
-		local mask_placeholder
+	local offshore_pumps =
+	{
+		"offshore-pump-0",
+		"offshore-pump-2",
+		"offshore-pump-3",
+		"offshore-pump-4"
+	}
+
+	for _, offshore_pump in pairs (offshore_pumps) do
+
+		local animation_table = {}
 		
-		if data.raw["assembling-machine"][entity_name] then
-			mask_powered = data.raw["assembling-machine"][entity_name].animation
-			mask_placeholder = data.raw["offshore-pump"][entity_name .. "-placeholder"].graphics_set.animation		
-		elseif data.raw["offshore-pump"][entity_name] then
-			mask_unpowered = data.raw["offshore-pump"][entity_name].graphics_set.animation
+		if data.raw["assembling-machine"][offshore_pump] then
+			table.insert(animation_table, data.raw["assembling-machine"][offshore_pump].animation)
+			table.insert(animation_table, data.raw["offshore-pump"][offshore_pump.."-placeholder"].graphics_set.animation)
+		elseif data.raw["offshore-pump"][offshore_pump] then
+			table.insert(animation_table, data.raw["offshore-pump"][offshore_pump].graphics_set.animation)
 		end
 		
-		local mask_table =
-		{
-			mask_unpowered,
-			mask_powered,
-			mask_placeholder
-		}
-		
-		for _, mask in pairs (mask_table) do
+		for _, animation in pairs (animation_table) do
 			-- North
-			table.insert(mask.north.layers,
+			table.insert(animation.north.layers,
 			{
-				stripes = make_stripes (8*4, "__P-U-M-P-S__/graphics/entity/" .. entity_name .. "/" .. entity_name .. "-mask_North.png"),
+				stripes = make_stripes (8*4, "__P-U-M-P-S__/graphics/entity/"..offshore_pump.."/"..offshore_pump.."-mask_North.png"),
 				priority = "high",
 				frame_count = 32,
 				animation_speed = 0.25,
@@ -607,7 +591,7 @@ function animation_set.assign_offshore_color()
 				shift = util.by_pixel(-2, -16),
 				hr_version =
 				{
-					stripes = make_stripes (8*4, "__P-U-M-P-S__/graphics/entity/" .. entity_name .. "/hr-" .. entity_name .. "-mask_North.png"),
+					stripes = make_stripes (8*4, "__P-U-M-P-S__/graphics/entity/"..offshore_pump.."/hr-"..offshore_pump.."-mask_North.png"),
 					priority = "high",
 					frame_count = 32,
 					animation_speed = 0.25,
@@ -618,9 +602,9 @@ function animation_set.assign_offshore_color()
 				}
 			})
 			-- East
-			table.insert(mask.east.layers,
+			table.insert(animation.east.layers,
 			{
-				stripes = make_stripes (8*4, "__P-U-M-P-S__/graphics/entity/" .. entity_name .. "/" .. entity_name .. "-mask_East.png"),
+				stripes = make_stripes (8*4, "__P-U-M-P-S__/graphics/entity/"..offshore_pump.."/"..offshore_pump.."-mask_East.png"),
 				priority = "high",
 				frame_count = 32,
 				animation_speed = 0.25,
@@ -629,7 +613,7 @@ function animation_set.assign_offshore_color()
 				shift = util.by_pixel(14, -2),
 				hr_version =
 				{
-					stripes = make_stripes (8*4, "__P-U-M-P-S__/graphics/entity/" .. entity_name .. "/hr-" .. entity_name .. "-mask_East.png"),
+					stripes = make_stripes (8*4, "__P-U-M-P-S__/graphics/entity/"..offshore_pump.."/hr-"..offshore_pump.."-mask_East.png"),
 					priority = "high",
 					frame_count = 32,
 					animation_speed = 0.25,
@@ -640,9 +624,9 @@ function animation_set.assign_offshore_color()
 				}
 			})
 			-- South
-			table.insert(mask.south.layers,
+			table.insert(animation.south.layers,
 			{
-				stripes = make_stripes (8*4, "__P-U-M-P-S__/graphics/entity/" .. entity_name .. "/" .. entity_name .. "-mask_South.png"),
+				stripes = make_stripes (8*4, "__P-U-M-P-S__/graphics/entity/"..offshore_pump.."/"..offshore_pump.."-mask_South.png"),
 				priority = "high",
 				frame_count = 32,
 				animation_speed = 0.25,
@@ -651,7 +635,7 @@ function animation_set.assign_offshore_color()
 				shift = util.by_pixel(-2, 0),
 				hr_version =
 				{
-					stripes = make_stripes (8*4, "__P-U-M-P-S__/graphics/entity/" .. entity_name .. "/hr-" .. entity_name .. "-mask_South.png"),
+					stripes = make_stripes (8*4, "__P-U-M-P-S__/graphics/entity/"..offshore_pump.."/hr-"..offshore_pump.."-mask_South.png"),
 					priority = "high",
 					frame_count = 32,
 					animation_speed = 0.25,
@@ -662,9 +646,9 @@ function animation_set.assign_offshore_color()
 				}
 			})
 			-- West
-			table.insert(mask.west.layers,
+			table.insert(animation.west.layers,
 			{
-				stripes = make_stripes (8*4, "__P-U-M-P-S__/graphics/entity/" .. entity_name .. "/" .. entity_name .. "-mask_West.png"),
+				stripes = make_stripes (8*4, "__P-U-M-P-S__/graphics/entity/"..offshore_pump.."/"..offshore_pump.."-mask_West.png"),
 				priority = "high",
 				frame_count = 32,
 				animation_speed = 0.25,
@@ -673,7 +657,7 @@ function animation_set.assign_offshore_color()
 				shift = util.by_pixel(-16, -2),
 				hr_version =
 				{
-					stripes = make_stripes (8*4, "__P-U-M-P-S__/graphics/entity/" .. entity_name .. "/hr-" .. entity_name .. "-mask_West.png"),
+					stripes = make_stripes (8*4, "__P-U-M-P-S__/graphics/entity/"..offshore_pump.."/hr-"..offshore_pump.."-mask_West.png"),
 					priority = "high",
 					frame_count = 32,
 					animation_speed = 0.25,

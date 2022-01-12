@@ -118,7 +118,7 @@ function OSM_local.pumpjack_entity_tiering()
 	local inputs =
 	{
 		type = "assembling-machine",
-		base_entity = "pumpjack",
+		base_entity_name = "pumpjack",
 		mod = "bobs",
 		group = "mining",
 		particles = {["small"] = 3},

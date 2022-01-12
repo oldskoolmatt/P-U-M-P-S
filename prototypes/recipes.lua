@@ -9,9 +9,9 @@ local offshore_pump_0 =
 	name = "offshore-pump-0",
 	ingredients =
 	{
-		{type = "item", name = "stone-brick", amount = 5},
-		{type = "item", name = "pipe", amount = 1},
-		{type = "item", name = "iron-gear-wheel", amount = 5}
+		{"stone-brick", 5},
+		{"pipe", 1},
+		{"iron-gear-wheel", 5}
 	},
 	result = "offshore-pump-0"
 }	data:extend({offshore_pump_0})
@@ -24,9 +24,9 @@ local offshore_pump_1 =
 	enabled = false,
 	ingredients =
 	{
-		{type = "item", name = "electronic-circuit", amount = 2},
-		{type = "item", name = "pipe", amount = 1},
-		{type = "item", name = "iron-gear-wheel", amount = 5}
+		{"electronic-circuit", 2},
+		{"pipe", 1},
+		{"iron-gear-wheel", 5}
 	},
 	result = "offshore-pump-1"
 }	data:extend({offshore_pump_1})
@@ -39,9 +39,9 @@ local offshore_pump_2 =
 	enabled = false,
 	ingredients =
 	{																				-- BOB --
-		{type = "item", name = "advanced-circuit", amount = 2},		--[[-------{"advanced-circuit"}-------]]
-		{type = "item", name = "steel-plate", amount = 2},			--[[----------{"steel-pipe"}----------]]
-		{type = "item", name = "iron-gear-wheel", amount = 5},		--[[-------{"steel-gear-wheel"}-------]]
+		{"advanced-circuit", 2},	--[[-------{"advanced-circuit"}-------]]
+		{"steel-plate", 2},			--[[----------{"steel-pipe"}----------]]
+		{"iron-gear-wheel", 5},		--[[-------{"steel-gear-wheel"}-------]]
 	},
 	result = "offshore-pump-2"
 }	data:extend({offshore_pump_2})
@@ -54,9 +54,9 @@ local offshore_pump_3 =
 	enabled = false,
 	ingredients =
 	{																				-- BOB --
-		{type = "item", name = "advanced-circuit", amount = 2},		--[[-------{"processing-unit"}-------]]
-		{type = "item", name = "steel-plate", amount = 4},			--[[--------{"titanium-pipe"}--------]]
-		{type = "item", name = "iron-gear-wheel", amount = 5},		--[[-----{"titanium-gear-wheel"}-----]]
+		{"advanced-circuit", 2},	--[[-------{"processing-unit"}-------]]
+		{"steel-plate", 4},			--[[--------{"titanium-pipe"}--------]]
+		{"iron-gear-wheel", 5},		--[[-----{"titanium-gear-wheel"}-----]]
 	},
 	result = "offshore-pump-3"
 }	data:extend({offshore_pump_3})
@@ -69,25 +69,102 @@ local offshore_pump_4 =
 	enabled = false,
 	ingredients =
 	{																				-- BOB --
-		{type = "item", name = "processing-unit", amount = 2},		--[[---{"advanced-processing-unit"}---]]
-		{type = "item", name = "steel-plate", amount = 8},			--[[---------{"nitinol-pipe"}---------]]
-		{type = "item", name = "iron-gear-wheel", amount = 5},		--[[------{"nitinol-gear-wheel"}------]]
+		{"processing-unit", 2},		--[[---{"advanced-processing-unit"}---]]
+		{"steel-plate", 8},			--[[---------{"nitinol-pipe"}---------]]
+		{"iron-gear-wheel", 5},		--[[------{"nitinol-gear-wheel"}------]]
 	},
 	result = "offshore-pump-4"
 }	data:extend({offshore_pump_4})
 
--- Water pumpjack
-local water_pumpjack =
-{
-	type = "recipe",
-	name = "water-pumpjack-1",
-	enabled = false,
-	ingredients =
+-- Water pumpjacks
+local water_pumpjack_setting = settings.startup["osm-pumps-enable-ground-water-pumpjacks"]
+if water_pumpjack_setting and water_pumpjack_setting.value == true then
+
+	-- Water pumpjack 1
+	local water_pumpjack_1 =
 	{
-		{type = "item", name = "iron-plate", amount = 10},
-		{type = "item", name = "iron-gear-wheel", amount = 10},
-		{type = "item", name = "pipe", amount = 10},
-		{type = "item", name = "electronic-circuit", amount = 5},
-	},
-	result = "water-pumpjack-1"
-}	data:extend({water_pumpjack})
+		type = "recipe",
+		name = "water-pumpjack-1",
+		enabled = false,
+		ingredients =
+		{
+			{"iron-plate", 10},
+			{"iron-gear-wheel", 10},
+			{"pipe", 10},
+			{"electronic-circuit", 5}
+		},
+		result = "water-pumpjack-1"
+	}	data:extend({water_pumpjack_1})
+	
+	-- Water pumpjack 2
+	local water_pumpjack_2 =
+	{
+		type = "recipe",
+		name = "water-pumpjack-2",
+		energy_required = 2,
+		ingredients =
+		{
+			{"water-pumpjack-1", 1},
+			{"steel-plate", 10},
+			{"iron-gear-wheel", 10},
+			{"electronic-circuit", 5},
+			{"pipe", 10}
+		},
+		result = "water-pumpjack-2",
+		enabled = false
+	}	data:extend({water_pumpjack_2})
+	
+	-- Water pumpjack 3
+	local water_pumpjack_3 =
+	{
+		type = "recipe",
+		name = "water-pumpjack-3",
+		energy_required = 2,
+		ingredients =
+		{
+			{"water-pumpjack-2", 1},
+			{"steel-plate", 10},
+			{"iron-gear-wheel", 10},
+			{"advanced-circuit", 5},
+			{"pipe", 10}
+		},
+		result = "water-pumpjack-3",
+		enabled = false
+	}	data:extend({water_pumpjack_3})
+	
+	-- Water pumpjack 4
+	local water_pumpjack_4 =
+	{
+		type = "recipe",
+		name = "water-pumpjack-4",
+		energy_required = 2,
+		ingredients =
+		{
+			{"water-pumpjack-3", 1},
+			{"steel-plate", 10},
+			{"iron-gear-wheel", 10},
+			{"processing-unit", 5},
+			{"pipe", 10}
+		},
+		result = "water-pumpjack-4",
+		enabled = false
+	}	data:extend({water_pumpjack_4})
+	
+	-- Water pumpjack 5
+	local water_pumpjack_5 =
+	{
+		type = "recipe",
+		name = "water-pumpjack-5",
+		energy_required = 2,
+		ingredients =
+		{
+			{"water-pumpjack-4", 1},
+			{"steel-plate", 10},
+			{"iron-gear-wheel", 10},
+			{"processing-unit", 5},
+			{"pipe", 10}
+		},
+		result = "water-pumpjack-5",
+		enabled = false
+	}	data:extend({water_pumpjack_5})
+end
